@@ -13,23 +13,30 @@ app.use(cors())
 
 const db = mysql.createConnection({
     host: process.env.DBHOST,
-    user : process.env.DB_USERNAME,
-    password : process.env.DB_PASSWORD,
-    database : process.env.DB_DATABASE,
+    user: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE,
     port: process.env.DB_PORT
 })
 
-    db.connect((err) => {
-        if(err){
-            throw err
-        } 
-        console.log("Database already connected");
-    })
+db.connect((err) => {
+    if (err) {
+        throw err
+    }
+    console.log("Database already connected");
+})
 
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+    const query = `SELECT * FROM users`;
+
+    db.query(query,(err, result) => {
+        if (err) {
+            throw err
+        }
+        res.send(result)
+    })
 })
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+    console.log(`Example app listening on port ${port}`)
 })
